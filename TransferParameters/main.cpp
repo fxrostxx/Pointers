@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-void Exchange(int a, int b);
+void Exchange(int& a, int& b);
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
 	return 0;
 }
 
-void Exchange(int a, int b)
+void Exchange(int& a, int& b)
 {
 	int temp = a;
 	a = b;
