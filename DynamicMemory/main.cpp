@@ -5,8 +5,10 @@ void FillArr(int arr[], const int n);
 void PrintArr(int arr[], const int n);
 int* PushBack(int arr[], int &n, const int value);
 int* PushFront(int arr[], int &n, const int value);
+int* Insert(int arr[], int& n, const int index, const int value);
 int* PopBack(int arr[], int& n);
 int* PopFront(int arr[], int& n);
+int* Erase(int arr[], int& n, const int index);
 
 int main()
 {
@@ -21,14 +23,14 @@ int main()
 	PrintArr(arr, n);
 
 	int value;
-	cout << "Введите значение добавляемого элемента: ";
+	cout << "Введите значение элемента добавляемого в конец: ";
 	cin >> value;
 
 	arr = PushBack(arr, n, value);
 
 	PrintArr(arr, n);
 
-	cout << "Введите значение добавляемого элемента: ";
+	cout << "Введите значение элемента добавляемого в начало: ";
 	cin >> value;
 
 	arr = PushFront(arr, n, value);
@@ -43,6 +45,24 @@ int main()
 	arr = PopFront(arr, n);
 
 	cout << "Удален первый элемент: " << endl;
+	PrintArr(arr, n);
+
+	int index;
+
+	cout << "Введите индекс добавляемого элемента: ";
+	cin >> index;
+	cout << "Введите значение добавляемого элемента: ";
+	cin >> value;
+
+	arr = Insert(arr, n, index, value);
+
+	PrintArr(arr, n);
+
+	cout << "Введите индекс удаляемого элемента: ";
+	cin >> index;
+
+	arr = Erase(arr, n, index);
+
 	PrintArr(arr, n);
 
 	delete[] arr;
@@ -90,6 +110,23 @@ int* PushFront(int arr[], int& n, const int value)
 	return newArr;
 }
 
+int* Insert(int arr[], int& n, const int index, const int value)
+{
+	if (index == n) return PushBack(arr, n, value);
+	else if (index == 0) return PushFront(arr, n, value);
+	else
+	{
+		int* newArr = new int[++n];
+		for (int i = 0; i < index; ++i) newArr[i] = arr[i];
+		newArr[index] = value;
+		for (int i = index + 1; i < n; ++i) newArr[i] = arr[i - 1];
+
+		delete[] arr;
+
+		return newArr;
+	}
+}
+
 int* PopBack(int arr[], int& n)
 {
 	int* newArr = new int[--n];
@@ -110,4 +147,22 @@ int* PopFront(int arr[], int& n)
 	delete[] arr;
 
 	return newArr;
+}
+
+int* Erase(int arr[], int& n, const int index)
+{
+	if (index == n - 1) return PopBack(arr, n);
+	else if (index == 0) return PopFront(arr, n);
+	else
+	{
+		int* newArr = new int[n - 1];
+		for (int i = 0; i < index; ++i) newArr[i] = arr[i];
+		for (int i = index + 1; i < n; ++i) newArr[i - 1] = arr[i];
+
+		delete[] arr;
+
+		--n;
+
+		return newArr;
+	}
 }
