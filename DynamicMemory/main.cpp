@@ -35,7 +35,6 @@ template<typename T> void EraseCol(T** arr, const int rows, int& cols, const int
 //#define DYNAMIC_MEMORY_1
 #define DYNAMIC_MEMORY_2
 
-#define DATATYPE double
 typedef double DataType;
 
 int main()
@@ -298,27 +297,11 @@ T* Erase(T arr[], int& n, const int index)
 
 void FillArr(int** arr, const int rows, const int cols, int minRand, int maxRand)
 {
-	for (int i = 0; i < rows; ++i)
-	{
-		for (int j = 0; j < cols; ++j)
-		{
-			arr[i][j] = rand() % (maxRand - minRand) + minRand;
-		}
-	}
+	for (int i = 0; i < rows; ++i) FillArr(arr[i], cols, minRand, maxRand);
 }
 void FillArr(double** arr, const int rows, const int cols, int minRand, int maxRand)
 {
-	minRand *= 100;
-	maxRand *= 100;
-
-	for (int i = 0; i < rows; ++i)
-	{
-		for (int j = 0; j < cols; ++j)
-		{
-			arr[i][j] = rand() % (maxRand - minRand) + minRand;
-			arr[i][j] /= 100;
-		}
-	}
+	for (int i = 0; i < rows; ++i) FillArr(arr[i], cols, minRand, maxRand);
 }
 template<typename T>
 void Allocate(T**& arr, const int rows, const int cols)
@@ -333,10 +316,7 @@ void Allocate(T**& arr, const int rows, const int cols)
 template<typename T>
 void Clear(T**& arr, const int rows, const int cols)
 {
-	for (int i = 0; i < rows; ++i)
-	{
-		delete[] arr[i];
-	}
+	for (int i = 0; i < rows; ++i) delete[] arr[i];
 
 	delete[] arr;
 
@@ -345,52 +325,23 @@ void Clear(T**& arr, const int rows, const int cols)
 template<typename T>
 void PrintArr(T** arr, const int rows, const int cols)
 {
-	for (int i = 0; i < rows; ++i)
-	{
-		for (int j = 0; j < cols; ++j)
-		{
-			cout << arr[i][j] << "\t";
-		}
-		cout << endl;
-	}
+	for (int i = 0; i < rows; ++i) PrintArr(arr[i], cols);
 }
 
 template<typename T>
 T** PushRowBack(T** arr, int& rows, const int cols)
 {
-	T** newArr = new T* [rows + 1];
+	T* newRow = new T[cols]{};
 
-	for (int i = 0; i < rows; ++i)
-	{
-		newArr[i] = arr[i];
-	}
-
-	delete[] arr;
-
-	newArr[rows] = new T[cols] {};
-
-	++rows;
-
-	return newArr;
+	return PushBack(arr, rows, newRow);
 }
 
 template<typename T>
 T** PushRowFront(T** arr, int& rows, const int cols)
 {
-	T** newArr = new T* [rows + 1];
+	T* newRow = new T[cols];
 
-	for (int i = 0; i < rows; ++i)
-	{
-		newArr[i + 1] = arr[i];
-	}
-
-	delete[] arr;
-
-	newArr[0] = new T[cols] {};
-
-	++rows;
-
-	return newArr;
+	return PushFront(arr, rows, newRow);
 }
 
 template<typename T>
@@ -400,52 +351,22 @@ T** InsertRow(T** arr, int& rows, const int cols, const int index)
 	else if (index == rows) return PushRowBack(arr, rows, cols);
 	else
 	{
-		T** newArr = new T* [rows + 1];
+		T* newRow = new T[cols]{};
 
-		for (int i = 0; i < rows; ++i)
-		{
-			if (i < index) newArr[i] = arr[i];
-			else newArr[i + 1] = arr[i];
-		}
-
-		newArr[index] = new T[cols] {};
-
-		++rows;
-
-		return newArr;
+		return Insert(arr, rows, index, newRow);
 	}
 }
 
 template<typename T>
 T** PopRowBack(T** arr, int& rows)
 {
-	T** newArr = new T* [--rows];
-
-	for (int i = 0; i < rows; ++i)
-	{
-		newArr[i] = arr[i];
-	}
-
-	delete[] arr[rows];
-	delete[] arr;
-
-	return newArr;
+	return PopBack(arr, rows);
 }
 
 template<typename T>
 T** PopRowFront(T** arr, int& rows)
 {
-	T** newArr = new T* [--rows];
-
-	for (int i = 0; i < rows; ++i)
-	{
-		newArr[i] = arr[i + 1];
-	}
-
-	delete[] arr[0];
-	delete[] arr;
-
-	return newArr;
+	return PopFront(arr, rows);
 }
 
 template<typename T>
@@ -453,35 +374,19 @@ T** EraseRow(T** arr, int& rows, const int index)
 {
 	if (index == 0) return PopRowFront(arr, rows);
 	else if (index == rows - 1) return PopRowBack(arr, rows);
-	else
-	{
-		T** newArr = new T* [--rows];
-
-		for (int i = 0; i < rows; ++i)
-		{
-			if (i < index) newArr[i] = arr[i];
-			else newArr[i] = arr[i + 1];
-		}
-
-		delete[] arr[index];
-		delete[] arr;
-
-		return newArr;
-	}
+	else return Erase(arr, rows, index);
 }
 
 template<typename T>
 void PushColBack(T** arr, const int rows, int& cols)
 {
+	int tempCols;
+
 	for (int i = 0; i < rows; ++i)
 	{
-		T* temp = new T[cols + 1] {};
+		tempCols = cols;
 
-		for (int j = 0; j < cols; ++j) temp[j] = arr[i][j];
-
-		delete[] arr[i];
-
-		arr[i] = temp;
+		arr[i] = PushBack(arr[i], tempCols, T(0));
 	}
 
 	++cols;
@@ -490,15 +395,13 @@ void PushColBack(T** arr, const int rows, int& cols)
 template<typename T>
 void PushColFront(T** arr, const int rows, int& cols)
 {
+	int tempCols;
+
 	for (int i = 0; i < rows; ++i)
 	{
-		T* temp = new T[cols + 1] {};
+		tempCols = cols;
 
-		for (int j = 0; j < cols; ++j) temp[j + 1] = arr[i][j];
-
-		delete[] arr[i];
-
-		arr[i] = temp;
+		arr[i] = PushFront(arr[i], tempCols, T(0));
 	}
 
 	++cols;
@@ -511,19 +414,13 @@ void InsertCol(T** arr, const int rows, int& cols, const int index)
 	else if (index == cols) PushColBack(arr, rows, cols);
 	else
 	{
+		int tempCols;
+
 		for (int i = 0; i < rows; ++i)
 		{
-			T* temp = new T[cols + 1] {};
+			tempCols = cols;
 
-			for (int j = 0; j < cols; ++j)
-			{
-				if (j < index) temp[j] = arr[i][j];
-				else temp[j + 1] = arr[i][j];
-			}
-
-			delete[] arr[i];
-
-			arr[i] = temp;
+			arr[i] = Insert(arr[i], tempCols, index, T(0));
 		}
 
 		++cols;
@@ -533,15 +430,13 @@ void InsertCol(T** arr, const int rows, int& cols, const int index)
 template<typename T>
 void PopColBack(T** arr, const int rows, int& cols)
 {
+	int tempCols;
+
 	for (int i = 0; i < rows; ++i)
 	{
-		T* temp = new T[cols - 1] {};
+		tempCols = cols;
 
-		for (int j = 0; j < cols - 1; ++j) temp[j] = arr[i][j];
-
-		delete[] arr[i];
-
-		arr[i] = temp;
+		arr[i] = PopBack(arr[i], tempCols);
 	}
 
 	--cols;
@@ -550,15 +445,13 @@ void PopColBack(T** arr, const int rows, int& cols)
 template<typename T>
 void PopColFront(T** arr, const int rows, int& cols)
 {
+	int tempCols;
+
 	for (int i = 0; i < rows; ++i)
 	{
-		T* temp = new T[cols - 1] {};
+		tempCols = cols;
 
-		for (int j = 0; j < cols - 1; ++j) temp[j] = arr[i][j + 1];
-
-		delete[] arr[i];
-
-		arr[i] = temp;
+		arr[i] = PopFront(arr[i], tempCols);
 	}
 
 	--cols;
@@ -571,19 +464,12 @@ void EraseCol(T** arr, const int rows, int& cols, const int index)
 	else if (index == cols - 1) PopColBack(arr, rows, cols);
 	else
 	{
+		int tempCols;
+
 		for (int i = 0; i < rows; ++i)
 		{
-			T* temp = new T[cols - 1] {};
-
-			for (int j = 0; j < cols - 1; ++j)
-			{
-				if (j < index) temp[j] = arr[i][j];
-				else temp[j] = arr[i][j + 1];
-			}
-
-			delete[] arr[i];
-
-			arr[i] = temp;
+			tempCols = cols;
+			arr[i] = Erase(arr[i], tempCols, index);
 		}
 
 		--cols;
