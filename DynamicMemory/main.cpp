@@ -299,7 +299,10 @@ void Clear(int**& arr, const int rows, const int cols)
 	{
 		delete[] arr[i];
 	}
+
 	delete[] arr;
+
+	arr = nullptr;
 }
 void PrintArr(int** arr, const int rows, const int cols)
 {
