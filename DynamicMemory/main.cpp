@@ -360,12 +360,16 @@ T** InsertRow(T** arr, int& rows, const int cols, const int index)
 template<typename T>
 T** PopRowBack(T** arr, int& rows)
 {
+	delete[] arr[rows - 1];
+
 	return PopBack(arr, rows);
 }
 
 template<typename T>
 T** PopRowFront(T** arr, int& rows)
 {
+	delete[] arr[0];
+
 	return PopFront(arr, rows);
 }
 
@@ -374,7 +378,12 @@ T** EraseRow(T** arr, int& rows, const int index)
 {
 	if (index == 0) return PopRowFront(arr, rows);
 	else if (index == rows - 1) return PopRowBack(arr, rows);
-	else return Erase(arr, rows, index);
+	else
+	{
+		delete arr[index];
+
+		return Erase(arr, rows, index);
+	}
 }
 
 template<typename T>
@@ -386,7 +395,7 @@ void PushColBack(T** arr, const int rows, int& cols)
 	{
 		tempCols = cols;
 
-		arr[i] = PushBack(arr[i], tempCols, T(0));
+		arr[i] = PushBack(arr[i], tempCols, T());
 	}
 
 	++cols;
@@ -401,7 +410,7 @@ void PushColFront(T** arr, const int rows, int& cols)
 	{
 		tempCols = cols;
 
-		arr[i] = PushFront(arr[i], tempCols, T(0));
+		arr[i] = PushFront(arr[i], tempCols, T());
 	}
 
 	++cols;
@@ -420,7 +429,7 @@ void InsertCol(T** arr, const int rows, int& cols, const int index)
 		{
 			tempCols = cols;
 
-			arr[i] = Insert(arr[i], tempCols, index, T(0));
+			arr[i] = Insert(arr[i], tempCols, index, T());
 		}
 
 		++cols;
