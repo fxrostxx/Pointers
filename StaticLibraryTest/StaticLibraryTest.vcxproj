@@ -18,11 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d264db33-c426-4ebe-871c-3d2c8c0a87e6}</ProjectGuid>
-    <RootNamespace>DynamicMemory</RootNamespace>
+    <ProjectGuid>{bb6cf655-e8b9-4b7b-8cfc-b1c04c5746ea}</ProjectGuid>
+    <RootNamespace>StaticLibraryTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,7 +43,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -104,10 +107,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\StaticLibraryTest\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(SolutionDir)\x64\Debug\DynamicMemory.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -126,56 +131,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Allocate.cpp" />
-    <ClCompile Include="Clear.cpp" />
-    <ClCompile Include="Erase.cpp" />
-    <ClCompile Include="EraseCol.cpp" />
-    <ClCompile Include="EraseRow.cpp" />
-    <ClCompile Include="FillArr.cpp" />
-    <ClCompile Include="Insert.cpp" />
-    <ClCompile Include="InsertCol.cpp" />
-    <ClCompile Include="InsertRow.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="PopBack.cpp" />
-    <ClCompile Include="PopColBack.cpp" />
-    <ClCompile Include="PopColFront.cpp" />
-    <ClCompile Include="PopFront.cpp" />
-    <ClCompile Include="PopRowBack.cpp" />
-    <ClCompile Include="PopRowFront.cpp" />
-    <ClCompile Include="PrintArr.cpp" />
-    <ClCompile Include="PushBack.cpp" />
-    <ClCompile Include="PushColBack.cpp" />
-    <ClCompile Include="PushColFront.cpp" />
-    <ClCompile Include="PushFront.cpp" />
-    <ClCompile Include="PushRowBack.cpp" />
-    <ClCompile Include="PushRowFront.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Allocate.h" />
-    <ClInclude Include="Clear.h" />
-    <ClInclude Include="Erase.h" />
-    <ClInclude Include="EraseCol.h" />
-    <ClInclude Include="EraseRow.h" />
-    <ClInclude Include="FillArr.h" />
-    <ClInclude Include="Insert.h" />
-    <ClInclude Include="InsertCol.h" />
-    <ClInclude Include="InsertRow.h" />
-    <ClInclude Include="PopBack.h" />
-    <ClInclude Include="PopColBack.h" />
-    <ClInclude Include="PopColFront.h" />
-    <ClInclude Include="PopFront.h" />
-    <ClInclude Include="PopRowBack.h" />
-    <ClInclude Include="PopRowFront.h" />
-    <ClInclude Include="PrintArr.h" />
-    <ClInclude Include="PushBack.h" />
-    <ClInclude Include="PushColBack.h" />
-    <ClInclude Include="PushColFront.h" />
-    <ClInclude Include="PushFront.h" />
-    <ClInclude Include="PushRowBack.h" />
-    <ClInclude Include="PushRowFront.h" />
-    <ClInclude Include="stdafx.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
